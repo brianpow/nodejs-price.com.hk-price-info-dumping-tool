@@ -96,7 +96,7 @@ function parseList(categoryName, data) {
             }).get().join(""))
         }
 
-        return [category, brand].concat(data).join(program.separator)
+        return [category, brand].concat(data).join(program.separator).trim()
     }).filter(function() {
         return this != ""
     }).get()
@@ -104,7 +104,7 @@ function parseList(categoryName, data) {
 
 var getProducts = function(url, name, data) {
     if (program.verbose > 0)
-        console.log(util.format("Finding products from %s (%s).", name, url))
+        console.log(util.format("Finding products from %s at %s.", name, url))
     let deferreds = []
     let jq = cheerio.load(data)
 
@@ -135,7 +135,6 @@ function main(min, max) {
         let $ = cheerio.load(res)
         let $a = $("a[href*='category.php?c=']")
         console.log(util.format("%s categories found!", $a.length))
-        console.log("Begins to parse and download product lists and information, it can take very long time, be patient.")
         $a.each(function(i) {
             min = (typeof min != "undefined") ? min : 0
             max = (typeof max != "undefined") ? max : 99999
@@ -153,6 +152,8 @@ function main(min, max) {
                     )
             }
         })
+        console.log(util.format("%s categories left after filter!", deferreds.length))
+        console.log("Begins to parse and download product lists and information, it can take very long time, be patient.")
 
         return Promise.all(deferreds).then(save, save)
     }).catch(errorHandler)
@@ -168,12 +169,12 @@ function banner() {
 }
 
 program
-    .version('1.0.0')
+    .version('1.0.1')
     .option('-c, --category <keywords or regular expression>', 'Download only phone info with brands matching <keywords> or <regular expression>', "")
     .option('-b, --brand <keywords or regular expression>', 'Download only phone info with brands matching <keywords> or <regular expression>', "")
     .option('-d, --model <keywords or regular expression>', 'Download only phone info with models matching <keywords> or <regular expression>', "")
     .option('-s, --separator <separator>', 'separator of saved file [default: <TAB>]', "\t")
-    .option('-m, --max-connection <max connection>', 'Maximum simultaneous HTTP connections, default is 4', parseInt, 2)
+    .option('-m, --max-connection <max connection>', 'Maximum simultaneous HTTP connections, default is 2', parseInt, 2)
     .option('-t, --timeout <time in ms>', 'Timeout for each HTTP request, default is 60000ms', parseInt, 60000)
     .option('-r, --retry <count>', 'Retry if HTTP connections failed, default is 10', parseInt, 10)
     .option('-R, --retry-delay <time in ms>', 'Retry dealy if HTTP connections failed, default is 60000ms', parseInt, 60000)
