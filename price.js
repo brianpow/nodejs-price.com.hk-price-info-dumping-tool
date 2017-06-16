@@ -140,16 +140,17 @@ function main(min, max) {
             max = (typeof max != "undefined") ? max : 99999
             if (i >= min && i <= max) {
                 let url = domain + this.attribs.href
-                let name = this.children[0].data
-                if (program.verbose > 1)
-                    console.log(util.format("Found category url: %s", url))
+                let category = this.children[0].data
 
-                if (!program.brand || (program.brand && (typeof program.brand == "object" && program.brand.test(brand) || brand.indexOf(program.brand) != -1)))
+                if (!program.category || (program.category && (typeof program.category == "object" && (program.category.test(category) || program.category.test(url)) || (category.indexOf(program.category) != -1 || url.indexOf(program.category)) != -1))) {
+                    if (program.verbose > 1)
+                        console.log(util.format("Found category %s with url: %s", category, url))
                     deferreds.push(
                         baseRequest({
                             url: url
-                        }).then(getProducts.bind(null, url, name)).catch(errorHandler)
+                        }).then(getProducts.bind(null, url, category)).catch(errorHandler)
                     )
+                }
             }
         })
         console.log(util.format("%s categories left after filter!", deferreds.length))
