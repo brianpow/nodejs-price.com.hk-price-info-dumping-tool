@@ -161,7 +161,8 @@ function main(min, max) {
 
 function errorHandler(e) {
     console.error(e);
-    process.exit(1)
+    if (program.exit)
+        process.exit(1)
 }
 
 function banner() {
@@ -179,6 +180,7 @@ program
     .option('-r, --retry <count>', 'Retry if HTTP connections failed, default is 10', parseInt, 10)
     .option('-R, --retry-delay <time in ms>', 'Retry dealy if HTTP connections failed, default is 60000ms', parseInt, 60000)
     .option('-a, --user-agent <user agent>', 'User agent in HTTP request header, default is "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+    .option('-e, --exit', 'Exit on error, don\'t continue')
     .option('-v, --verbose', 'Be more verbose (max -vvv)', increaseVerbosity, 0)
     .parse(process.argv)
 
