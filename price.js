@@ -77,7 +77,8 @@ function parseList(categoryName, data) {
         if (program.brand && (typeof program.brand == "object" && !program.brand.test(brand) || brand.indexOf(program.brand) == -1))
             return "";
 
-        if (!program.model || (program.model && (typeof program.model == "object" && program.model.test(model) || model.indexOf(program.model) != -1)))
+        if (program.model && (typeof program.model == "object" && !program.model.test(model) || model.indexOf(program.model) != -1))
+            return "";
 
             if (program.verbose > 1)
                 console.log(util.format("Parsing %s...", jq("div.line-01", this).eq(0).text().trim().substr(0, 30)))
