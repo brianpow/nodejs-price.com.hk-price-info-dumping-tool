@@ -173,9 +173,9 @@ function banner() {
 
 program
     .version('1.0.1')
-    .option('-c, --category <keywords or regular expression>', 'Download only phone info with brands matching <keywords> or <regular expression>', "")
-    .option('-b, --brand <keywords or regular expression>', 'Download only phone info with brands matching <keywords> or <regular expression>', "")
-    .option('-d, --model <keywords or regular expression>', 'Download only phone info with models matching <keywords> or <regular expression>', "")
+    .option('-c, --category <keywords or regular expression>', 'Download only product info with brands matching <keywords> or <regular expression>', "")
+    .option('-b, --brand <keywords or regular expression>', 'Download only product info with brands matching <keywords> or <regular expression>', "")
+    .option('-d, --model <keywords or regular expression>', 'Download only product info with models matching <keywords> or <regular expression>', "")
     .option('-s, --separator <separator>', 'separator of saved file [default: <TAB>]', "\t")
     .option('-m, --max-connection <max connection>', 'Maximum simultaneous HTTP connections, default is 2', parseInt, 2)
     .option('-t, --timeout <time in ms>', 'Timeout for each HTTP request, default is 60000ms', parseInt, 60000)
