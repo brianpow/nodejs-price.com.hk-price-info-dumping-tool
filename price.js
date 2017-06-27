@@ -278,7 +278,7 @@ program
     .option('-R, --retry-delay <time in ms>', 'Retry dealy if HTTP connections failed, default is 60000ms', parseInt, 60000)
     .option('-a, --user-agent <user agent>', 'User agent in HTTP request header, default is "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
     .option('-D, --detail', 'Download each product page for more product details (SLOW and huge file!).')
-    .option('-S, --sellers', 'Download each product page for all sellers\' formation (SLOW and huge file!).')
+    .option('-S, --sellers', 'Download each product page for all sellers\' information (SLOW and huge file!).')
     .option('-e, --exit', 'Exit on error, don\'t continue')
     .option('-v, --verbose', 'Be more verbose (max -vvv)', increaseVerbosity, 0)
     .parse(process.argv)
