@@ -47,7 +47,7 @@ function parseDetail(data, sellers, html) {
         console.log("parseDetail")
 
     let jq = cheerio.load(html)
-    if (program.detail && !sellers.length) {
+    if (program.detail && (!program.sellers || program.sellers && !sellers.length)) {
         let $$tr = jq("div.line-06 tr")
         $$tr.each(function() {
             let header = jq("td", this).eq(0).text().split(":")[0].trim()
@@ -70,7 +70,7 @@ function parseDetail(data, sellers, html) {
 
     if (program.sellers) {
         jq("div.page-product > ul > li").each(function() {
-            if (this.attribs['name']) {
+            if (this.attribs['name'] && program.sellers >= noOfSellers) {
                 sellers.push([
                     jq("p.quotation-merchant-name", this).text().trim(),
                     jq("div span.quotation-merchant-level", this).text().trim(),
@@ -87,7 +87,7 @@ function parseDetail(data, sellers, html) {
             console.log("Total %d sellers parsed", sellers.length)
     }
     let nextPage = jq("ul.pagination li").last()
-    if (program.sellers && nextPage.text().indexOf("下一頁") != -1) {
+    if (program.sellers && program.sellers >= noOfSellers && nextPage.text().indexOf("下一頁") != -1) {
         let url = domain + nextPage.find("a").attr("href")
         return baseRequest({
             url: url
@@ -280,7 +280,7 @@ program
     .option('-R, --retry-delay <time in ms>', 'Retry dealy if HTTP connections failed, default is 60000ms', parseInt, 60000)
     .option('-a, --user-agent <user agent>', 'User agent in HTTP request header, default is "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1"', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
     .option('-D, --detail', 'Download each product page for more product details (SLOW and huge file!).')
-    .option('-S, --sellers', 'Download each product page for all sellers\' information (SLOW and huge file!).')
+    .option('-S, --sellers <max number>', 'Download each product page for sellers\' information (SLOW and huge file!) [default: 999].', parseInt, 999)
     .option('-e, --exit', 'Exit on error, don\'t continue')
     .option('-v, --verbose', 'Be more verbose (max -vvv)', increaseVerbosity, 0)
     .parse(process.argv)
