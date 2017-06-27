@@ -227,7 +227,9 @@ function main(min, max) {
         url: domain
     }).then(function(res) {
         let $ = cheerio.load(res)
-        let $a = $("div.menu-mega a[href*='category.php?c=']")
+        let $a = $("div.menu-mega a[href^='/category.php?c=']").filter(function() {
+            return this.children[0].data.trim() !== ""
+        })
         console.log(util.format("%s categories found!", $a.length))
         $a.each(function(i) {
             min = (typeof min != "undefined") ? min : 0
