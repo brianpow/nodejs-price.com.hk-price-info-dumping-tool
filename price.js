@@ -12,6 +12,15 @@ function increaseVerbosity(v, total) {
     return total + 1
 }
 
+function getFullUrl(url, domain) {
+    if (url.indexOf(domain) !== 0) {
+        if (url.substr(0, 1) != "/")
+            url = "/" + url
+        url = domain + url
+    }
+    return url
+}
+
 function isRegExp(val) {
     let matches = val.match(/^\/(.+)\/(\w+)?$/)
     if (matches) {
@@ -88,7 +97,7 @@ function parseDetail(data, sellers, html) {
     }
     let nextPage = jq("ul.pagination li").last()
     if (program.sellers && program.sellers >= noOfSellers && nextPage.text().indexOf("下一頁") != -1) {
-        let url = domain + nextPage.find("a").attr("href")
+        let url = getFullUrl(nextPage.find("a").attr("href"), domain)
         return baseRequest({
             url: url
         }).then(parseDetail.bind(null, data, sellers))
@@ -125,9 +134,15 @@ function parseList(categoryName, html) {
             jq("div.price-range").eq(0).find("span.product-prop > img").attr("title"),
             jq("div.price-range", this).eq(1).find("span.text-price-number").eq(0).text().trim(),
             jq("div.price-range", this).eq(1).find("span.text-price-number").eq(1).text().trim(),
-            jq("div.price-range", this).eq(1).find("span.product-prop > img").attr("title"),
-            domain + "/" + jq("div.line-01 a", this).eq(0).attr("href")
+            jq("div.price-range", this).eq(1).find("span.product-prop > img").attr("title")
         ]
+
+        let url = jq("div.line-01 a", this).eq(0).map(function() {
+            return getFullUrl(this.attribs['href'], domain)
+        }).get(0)
+
+        data.push(url)
+
         if (!jq("a.btn", this).length)
             return [];
 
@@ -168,7 +183,7 @@ function parseList(categoryName, html) {
         for (let row of rows) {
 
             if (program.verbose > 1)
-                console.log(util.format("Preparing to download product detail page of %s %s %s at %s.", row[0], row[1], row[2], domain + "/" + row[10]))
+                console.log(util.format("Preparing to download product detail page of %s %s %s at %s.", row[0], row[1], row[2], row[10]))
 
             deferreds.push(baseRequest({
                 url: row[10]
@@ -204,7 +219,7 @@ var getProducts = function(url, name, data) {
     jq("ul.pagination li").last().find("a").eq(0).filter(function() {
         return this.children[0].data.indexOf("下一頁") != -1
     }).each(function() {
-        let url = domain + this.attribs['href']
+        let url = getFullUrl(this.attribs['href'], domain)
         if (program.verbose > 1)
             console.log(util.format("Additional pages found at %s.", url))
         deferreds.push(
@@ -236,7 +251,7 @@ function main(min, max) {
             max = (typeof max != "undefined") ? max : 99999
             if (i >= min && i <= max) {
 
-                let url = domain + "/" + this.attribs.href
+                let url = getFullUrl(this.attribs.href, domain)
                 let category = this.children[0].data
 
                 if (!program.category || (program.category && (typeof program.category == "object" && (program.category.test(category) || program.category.test(url)) || (category.indexOf(program.category) != -1 || url.indexOf(program.category)) != -1))) {
