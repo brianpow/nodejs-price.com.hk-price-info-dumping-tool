@@ -168,7 +168,7 @@ function parseList(categoryName, html) {
         for (let row of rows) {
 
             if (program.verbose > 1)
-                console.log(util.format("Preparing to download prodct detail page of %s %s %s at %s.", row[0], row[1], row[2], domain + "/" + row[10]))
+                console.log(util.format("Preparing to download product detail page of %s %s %s at %s.", row[0], row[1], row[2], domain + "/" + row[10]))
 
             deferreds.push(baseRequest({
                 url: row[10]
