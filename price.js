@@ -62,7 +62,7 @@ function parseDetail(data, sellers, html) {
             let header = jq("td", this).eq(0).text().split(":")[0].trim()
             if (additionalHeaders.indexOf(header) == -1) {
                 if (program.verbose > 2)
-                    console.log("Additional headers found: %s", header)
+                    console.log("Additional header found: %s", header)
 
                 additionalHeaders.push(header)
             }
