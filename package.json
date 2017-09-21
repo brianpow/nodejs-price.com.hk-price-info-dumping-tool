@@ -5,11 +5,12 @@
   "main": "price.js",
   "dependencies": {
     "array-flatten": "^2.1.0",
-    "array-to-csv": "git+https://github.com/jonathanong/array-to-csv",
+    "array-to-csv": "git+https://github.com/jonathanong/array-to-csv.git",
     "bluebird": "^3.4.7",
-    "cheerio": "^0.22.0",
+    "cheerio": "^1.0.0-rc.2",
     "commander": "^2.9.0",
     "flatten": "^1.0.2",
+    "node-europa": "^4.0.0",
     "requestretry": "^1.12.0",
     "util": "^0.10.3"
   },
