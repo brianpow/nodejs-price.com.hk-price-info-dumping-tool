@@ -285,7 +285,7 @@ function banner() {
 
 program
     .version('1.0.1')
-    .option('-c, --category <keywords or regular expression>', 'Download only product info with brands matching <keywords> or <regular expression>', "")
+    .option('-c, --category <category ID or keywords or regular expression>', 'Download only product info with category matching <category ID> or <keywords> or <regular expression>', "")
     .option('-b, --brand <keywords or regular expression>', 'Download only product info with brands matching <keywords> or <regular expression>', "")
     .option('-d, --model <keywords or regular expression>', 'Download only product info with models matching <keywords> or <regular expression>', "")
     .option('-s, --separator <separator>', 'separator of saved file [default: <TAB>]', "\t")
